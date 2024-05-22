@@ -5,6 +5,16 @@ const showMillionairesBtn = document.getElementById('show-millionaires');
 const sortBtn = document.getElementById('sort');
 const calculateWealthBtn = document.getElementById('calculate-wealth');
 
+
+  // Event listeners
+  addUserBtn.addEventListener('click', getRandomUser);
+  doubleBtn.addEventListener('click', doblarDinero);
+  sortBtn.addEventListener('click', ordenarPorDinero);
+  showMillionairesBtn.addEventListener('click', mostrarMillonarios);
+  calculateWealthBtn.addEventListener('click', calculateWealth);
+  
+
+
 //creamos el vector para almacenar usuarios
 let userList = getSavedUsers() || []; //cargamos los datos al inciar laapp
 let totalWealth = getSavedTotalWealth() || 0; //cargamos el totalde dinero a 0 cuando iniciamos la app
@@ -64,13 +74,20 @@ function mostrarMillonarios() {
 
 //medainte el metodo reduce vamos acumulando la suma del dinero en el acc que inicalmente valdria 0 para finalmente mostrar el total 
 function calculateWealth() {
-    totalWealth = userList.reduce((acc, user) => (acc += user.money), 0);
+  totalWealth = userList.reduce((acc, user) => (acc += user.money), 0);
+  const existingWealthElement = document.getElementById('total-wealth');
+
+  if (existingWealthElement) {
+    existingWealthElement.innerHTML = ` <strong>Total de riqueza: ${formatMoney(totalWealth)}</strong>`;
+  } else {
     const wealthElement = document.createElement('div');
+    wealthElement.id = 'total-wealth';
     wealthElement.innerHTML = `<h3>Total de riqueza: <strong>${formatMoney(totalWealth)}</strong></h3>`;
     main.appendChild(wealthElement);
-    saveTotalWealth();
   }
 
+  saveTotalWealth();
+}
   // Función que actualiza el DOM
 function updateDOM() {
     main.innerHTML = '<h2><strong>Usuario</strong> Riqueza</h2>';
@@ -111,11 +128,4 @@ function updateDOM() {
   if (!userList.length) {
     getRandomUser();
   }
-  
-  // Event listeners
-  addUserBtn.addEventListener('click', getRandomUser);
-  doubleBtn.addEventListener('click', doblarDinero);
-  sortBtn.addEventListener('click', ordenarPorDinero);
-  showMillionairesBtn.addEventListener('click', mostrarMillonarios);
-  calculateWealthBtn.addEventListener('click', calculateWealth);
   
